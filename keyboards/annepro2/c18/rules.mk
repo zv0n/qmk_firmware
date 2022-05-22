@@ -29,6 +29,7 @@ AUDIO_ENABLE = no           # Audio output
 # Custom RGB matrix handling
 RGB_MATRIX_ENABLE = yes
 RGB_MATRIX_DRIVER = custom
+RGB_MATRIX_CUSTOM_USER = yes
 
 # Keys
 CUSTOM_MATRIX = lite
