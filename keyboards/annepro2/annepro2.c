@@ -138,6 +138,42 @@ void matrix_scan_kb() {
     matrix_scan_user();
 }
 
+uint8_t toggleBacklight(void) {
+    if (get_mods() & MOD_MASK_SHIFT) {
+        rgb_matrix_increase_speed();
+        return false;
+    } else if (get_mods() & MOD_MASK_CTRL) {
+        rgb_matrix_decrease_speed();
+        return false;
+    } else {
+        if (led_enabled) {
+            ap2_led_disable();
+            rgb_matrix_disable();
+            led_enabled = 0;
+        } else {
+            ap2_led_enable();
+            rgb_matrix_enable();
+            led_enabled = 1;
+        }
+        return true;
+    }
+    return true;
+}
+
+uint8_t changeAnimation(void) {
+    if (get_mods() & MOD_MASK_CTRL) {
+        rgb_matrix_step_reverse();
+        return false;
+    } else {
+        rgb_matrix_step();
+    }
+    return true;
+}
+
+void fancyAnim(void) {
+    rgb_matrix_mode(RGB_MATRIX_CYCLE_LEFT_RIGHT);
+}
+
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
         if (ap2_led_status.matrix_enabled && ap2_led_status.is_reactive) {
@@ -258,35 +294,13 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 
             case KC_AP_RGB_TOG:
                 if (record->event.pressed) {
-                    if (get_mods() & MOD_MASK_SHIFT) {
-                        rgb_matrix_increase_speed();
-                        return false;
-                    } else if (get_mods() & MOD_MASK_CTRL) {
-                        rgb_matrix_decrease_speed();
-                        return false;
-                    } else {
-                        if (led_enabled) {
-                            ap2_led_disable();
-                            rgb_matrix_disable();
-                            led_enabled = 0;
-                        } else {
-                            ap2_led_enable();
-                            rgb_matrix_enable();
-                            led_enabled = 1;
-                        }
-                        return true;
-                    }
+                    return toggleBacklight();
                 }
                 return true;
 
             case KC_AP_RGB_MOD:
                 if (record->event.pressed) {
-                    if (get_mods() & MOD_MASK_CTRL) {
-                        rgb_matrix_step_reverse();
-                        return false;
-                    } else {
-                        rgb_matrix_step();
-                    }
+                    return changeAnimation();
                 }
                 return true;
             #endif
