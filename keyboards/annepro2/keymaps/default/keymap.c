@@ -119,7 +119,7 @@ enum anne_pro_layers {
 // The function to handle the caps lock logic
 bool led_update_user(led_t leds) {
     if (leds.caps_lock) {
-        ap2_led_set_sticky_key(2, 0, caps_lock_color);
+        ap2_led_sticky_set_key(2, 0, caps_lock_color);
     } else if (!leds.caps_lock) {
         ap2_led_unset_sticky_key(2, 0);
     }
@@ -134,7 +134,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
         case FN2:
             break;
         case GAMING:
-            ap2_led_set_sticky_key(3, 3, layer_indicator_color);
+            ap2_led_sticky_set_key(3, 3, layer_indicator_color);
             break;
         default:
             // Reset back to the current profile
